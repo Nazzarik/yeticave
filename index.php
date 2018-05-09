@@ -1,19 +1,10 @@
 <?php
-// устанавливаем часовой пояс в Московское время
-date_default_timezone_set('Europe/Moscow');
+$is_auth = (bool) rand(0, 1);
 
-// записать в эту переменную оставшееся время в этом формате (ЧЧ:ММ)
-$lot_time_remaining = "00:00";
-
-// временная метка для полночи следующего дня
-$tomorrow = strtotime('tomorrow midnight');
-
-// временная метка для настоящего времени
-$now = time();
-
-// далее нужно вычислить оставшееся время до начала следующих суток и записать его в переменную $lot_time_remaining
-// ...
+$user_name = 'Константин';
+$user_avatar = 'img/user.jpg';
 ?>
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -37,13 +28,27 @@ $now = time();
         <a class="main-header__add-lot button" href="add-lot.html">Добавить лот</a>
 
         <nav class="user-menu">
-            <div class="user-menu__image">
-                <img src="img/user.jpg" width="40" height="40" alt="Пользователь">
-            </div>
-            <div class="user-menu__logged">
-                <p>Константин</p>
-                <a href="#">Выйти</a>
-            </div>
+
+            <?php if ($is_auth == true): ?>
+                <div class="user-menu__image">
+                    <img src="<?=$user_avatar;?>" width="40" height="40" alt="Пользователь">
+                </div>
+                <div class="user-menu__logged">
+                    <p><?=$user_name;?></p>
+                    <a href="#">Выйти</a>
+                </div>
+
+            <?php else: ?>
+                <ul class="user-menu__list">
+                    <li class="iser-menu__item">
+                        <a href="#">Регистрация</a>
+                    </li>
+                    <li class="iser-menu__item">
+                        <a href="#">Вход</a>
+                    </li>
+                </ul>
+            <?php endif; ?>
+
         </nav>
     </div>
 </header>
