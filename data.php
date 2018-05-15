@@ -1,5 +1,14 @@
 <?php
 
+date_default_timezone_set("Europe/Kiev");
+$ts = time();
+$end_ts = strtotime('tomorrow');
+$curtime = $end_ts - $ts;
+$hrs = floor($curtime / 3600);
+$min = floor(($curtime % 3600) /60);
+$remaining = $hrs.":".$min;
+
+
 $title = "YetiCave";
 
 $is_auth = (bool) rand(0, 1);

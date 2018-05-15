@@ -5,7 +5,8 @@ require_once ('config.php');
 require_once ('data.php');
 
 $page_cont = renderTemplate('templates/index.php', [
-    'lot_list' => $lot_list
+    'lot_list' => $lot_list,
+    'lot_time_remaining' => $remaining
 ]);
 
 $layout_cont = renderTemplate('templates/layout.php', [
