@@ -4,8 +4,16 @@ require_once ('data.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $lot = $_POST;
-  $required = ['title', 'description'];
-  $dict = ['title' => 'Название', 'description' => 'Описание'];
+
+  $required = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
+  $dict = [
+      'lot-name' => 'Название',
+      'category' => 'Категория',
+      'message' => 'Описание',
+      'lot-rate' => 'Старт-цена',
+      'lot-step' => 'Шаг ставки',
+      'lot-date' => 'Дата завершения'
+      ];
   $errors = [];
 
   foreach ($_POST as $key => $value) {
@@ -16,19 +24,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       }
   }
 
-  if (isset($_FILES['photo_file']['name'])) {
-      $path = $_FILES['photo_file']['name'];
+  if (isset($_FILES['photo_file'] ['name'])) {
 
+      $tmp_name = $_FILES['photo_file']['tmp_name'];
+      $path = $_FILES['photo_file']['name'];
+//
       $finfo = finfo_open(FILEINFO_MIME_TYPE);
-      $file_type = finfo_file($finfo, $path);
-      if ($file_type !== "image/jpg") {
+      $file_type = finfo_file($finfo, $tmp_name);
+//
+      if ($file_type !== "image/jpeg") {
           $errors['Файл'] = 'Загрузите картинку в JPG формате!';
       } else {
-          $res = move_uploaded_file($_FILES['photo_file']['tmp_name'], 'img/' . $path);
-          $lot['photo_file'] = $path;
-//          move_uploaded_file($tmp_name, 'img/' . $path);
+          move_uploaded_file($tmp_name, 'img/' . $path);
+          $lot['path'] = $path;
       }
-  }else {
+  } else {
       $errors['Файл'] = 'Вы не згрузили файл';
   }
 
