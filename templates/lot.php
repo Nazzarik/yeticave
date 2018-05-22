@@ -22,6 +22,7 @@
             </li>
         </ul>
     </nav>
+<?php print_r($cookie);?>
 
     <section class="lot-item container">
         <h2><?=$lot['lot-name'];?></h2>
