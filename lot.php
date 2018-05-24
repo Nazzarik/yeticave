@@ -1,6 +1,10 @@
 <?php
 require_once ('functions.php');
 require_once ('data.php');
+require_once ('config.php');
+require_once ('userdata.php');
+
+session_start();
 
 $lot = null;
 
@@ -47,9 +51,7 @@ $page_content = renderTemplate('templates/lot.php', [
 ]);
 $layout_content = renderTemplate('templates/layout.php', [
     'title' => $title,
-    'user_name' => $user_name,
-    'is_auth' => $is_auth,
-    'user_avatar' => $user_avatar,
+    'username' => $_SESSION['user']['name'],
     'content' => $page_content,
     'category_arr' => $category_arr
 ]);
