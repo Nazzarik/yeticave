@@ -4,6 +4,8 @@ require_once ('functions.php');
 require_once ('config.php');
 require_once ('data.php');
 
+session_start();
+
 $page_cont = renderTemplate('templates/index.php', [
     'lot_list' => $lot_list,
     'lot_time_remaining' => $remaining
@@ -11,6 +13,7 @@ $page_cont = renderTemplate('templates/index.php', [
 
 $layout_cont = renderTemplate('templates/layout.php', [
     'title' => $title,
+    'username' => $_SESSION['user']['name'],
     'user_name' => $user_name,
     'is_auth' => $is_auth,
     'user_avatar' => $user_avatar,
