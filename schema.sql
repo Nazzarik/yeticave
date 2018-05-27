@@ -24,10 +24,16 @@ create table lots (
   name char(255),
   category_id tinyint,
   image char(128),
-  lote_rate int(12),
+  lot_rate int(12),
   lot_step int(12),
   close_date datetime,
-  description char(255)
+  description text(1000)
+);
+
+create table bets (
+  price int,
+  user_id int,
+  lot_id int
 );
 
 create unique index name on users(name);
