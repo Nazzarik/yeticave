@@ -18,20 +18,17 @@
             <input type="search" name="search" placeholder="Поиск лота">
             <input class="main-header__search-btn" type="submit" name="find" value="Найти">
         </form>
-        <?php if (isset($_SESSION['user'])) : ?>
-
-        <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
-        <?php endif; ?>
+        <a class="main-header__add-lot button" href="add-lot.html">Добавить лот</a>
 
         <nav class="user-menu">
 
-            <?php if (isset($_SESSION['user'])) : ?>
+            <?php if ($is_auth == true): ?>
                 <div class="user-menu__image">
                     <img src="<?=$user_avatar;?>" width="40" height="40" alt="Пользователь">
                 </div>
                 <div class="user-menu__logged">
-                    <p><?=$username;?></p>
-                    <a href="logout.php">Выйти</a>
+                    <p><?=$user_name;?></p>
+                    <a href="#">Выйти</a>
                 </div>
 
             <?php else: ?>
@@ -40,7 +37,7 @@
                         <a href="#">Регистрация</a>
                     </li>
                     <li class="iser-menu__item">
-                        <a href="login.php">Вход</a>
+                        <a href="#">Вход</a>
                     </li>
                 </ul>
             <?php endif; ?>

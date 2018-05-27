@@ -31,7 +31,7 @@ $lot_list = [
     ],
     [
         'id' => '2',
-        'lot-name' => 'DC Ply Mens 2016/2017 Snowboard',
+        'lot-name' => 'DC Play Mens 2016/2017 Snowboard',
         'category' => 'Доски и лыжи',
         'lot-rate' => '159999',
         'lot-step' => '12 000',
