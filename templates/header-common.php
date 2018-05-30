@@ -17,7 +17,7 @@
             </div>
             <div class="user-menu__logged">
                 <p><?=$user['name'];?></p>
-                <a href="#">Выйти</a>
+                <a href="logout.php">Выйти</a>
             </div>
 
         <?php else: ?>
