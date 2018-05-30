@@ -7,6 +7,9 @@ require_once ('userdata.php');
 
 session_start();
 
+$nav_cont = renderTemplate('templates/cat_list.php', []);
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
 
@@ -17,8 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors[$field] = 'Єто поле надо заполнить';
         }
     }
-
-    if (!count($errors) and $user = searchUserByEmail($form['email'], $users)) {
+    if (!count($errors) and $user =  searchUserByEmail($form['email'], $users)) {
         if (password_verify($form['password'], $user['password'])) {
             $_SESSION['user'] = $user;
         }
@@ -31,7 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if (count($errors)) {
-        $page_cont = renderTemplate('templates/login.php', [
+        $main_cont = renderTemplate('templates/login.php', [
+            'nav_cont' => $nav_cont,
             'form' => $form,
             'errors' => $errors
         ]);
@@ -43,22 +46,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 else {
     if (isset($_SESSION['user'])) {
-        $page_cont = renderTemplate('templates/lot.php', []);
+        $main_cont = renderTemplate('templates/lot.php', []);
     }
     else {
-        $page_cont = renderTemplate('templates/login.php', []);
+        $main_cont = renderTemplate('templates/login.php', ['nav_cont' => $nav_cont]);
     }
 }
 
-
+$header_cont = renderTemplate('templates/header-common.php', ['user' => $_SESSION['user']]);
+$footer_cont = renderTemplate('templates/footer-common.php', ['nav_cont' => $nav_cont]);
 $layout_cont = renderTemplate('templates/layout.php', [
     'title' => $title,
-    'username' => $_SESSION['user']['name'],
+    'header_cont' => $header_cont,
+    'content' => $main_cont,
+    'footer_cont' => $footer_cont,
+    'category_arr' => $category_arr,
     'user_name' => $user_name,
     'is_auth' => $is_auth,
     'user_avatar' => $user_avatar,
-    'content' => $page_cont,
-    'category_arr' => $category_arr
 ]);
 
 print($layout_cont);

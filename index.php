@@ -6,29 +6,20 @@ require_once ('data.php');
 
 session_start();
 
-$page_cont = renderTemplate('templates/index.php', [
-    'lot_list' => $lot_list,
-    'lot_time_remaining' => $remaining
-]);
+
+$nav_cont = renderTemplate('templates/cat_list.php', []);
+
+$header_cont = renderTemplate('templates/header-common.php', ['user' => $_SESSION['user']]);
+$main_cont = renderTemplate('templates/index.php', ['lot_list' => $lot_list, 'lot_time_remaining' => $remaining]);
+$footer_cont = renderTemplate('templates/footer-common.php', ['nav_cont' => $nav_cont]);
 
 $layout_cont = renderTemplate('templates/layout.php', [
     'title' => $title,
-    'username' => $_SESSION['user']['name'],
-    'user_name' => $user_name,
-    'is_auth' => $is_auth,
-    'user_avatar' => $user_avatar,
-    'content' => $page_cont,
+    'main_class' => 'class="container"',
+    'header_cont' => $header_cont,
+    'content' => $main_cont,
+    'footer_cont' => $footer_cont,
     'category_arr' => $category_arr
 ]);
-
-//print($layout_cont);
-
-
-//if ($config['enable']) {
-//    $content = require_once ($config['tpl_path'] . 'layout.php');
-//} else {
-//    $error_msg = "Сайт на ремонте =)";
-//    $content =require_once ($config['tpl_path'] . 'layout.php');
-//}
 
 print($layout_cont);
