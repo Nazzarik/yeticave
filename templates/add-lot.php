@@ -36,7 +36,7 @@
     <div class="form__item form__item--wide <?=$class_name;?>">
         <label for="message">Описание</label>
         <textarea id="message" name="message" placeholder="Напишите описание лота"><?= $value;?></textarea>
-        <span class="form__error"></span>
+        <span class="form__error"><></span>
     </div>
 
     <?php $class_name = isset($errors['Описание']) ? "form__item--invalid" : "";

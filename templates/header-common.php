@@ -7,7 +7,11 @@
         <input type="search" name="search" placeholder="Поиск лота">
         <input class="main-header__search-btn" type="submit" name="find" value="Найти">
     </form>
+    <?php if (isset($_SESSION['user'])): ?>
     <a class="main-header__add-lot button" href="add-lot.php">Добавить лот</a>
+    <?php else: ?>
+    <div style="margin-right: 10%"></div>
+    <?php endif; ?>
 
     <nav class="user-menu">
 
