@@ -46,7 +46,7 @@ else {
                 $errors['Файл'] = 'Загрузите картинку в JPG формате!';
             } else {
                 move_uploaded_file($tmp_name, 'img/' . $path);
-                $lot['path'] = $path;
+                $lot['photo_file'] = $path;
             }
         } else {
             $errors['Файл'] = 'Вы не згрузили файл';
@@ -59,7 +59,7 @@ else {
                 'errors' => $errors
             ]);
         }else {
-            $main_cont = renderTemplate('templates/lot.php', ['lot' => $lot, 'nav_cont' => $nav_cont]);
+            $main_cont = renderTemplate('templates/lot.php', ['user' => $_SESSION['user'], 'lot' => $lot, 'nav_cont' => $nav_cont]);
         }
 
     }
