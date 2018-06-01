@@ -7,16 +7,15 @@ require_once ('init.php');
 
 session_start();
 
-$nav_cont = renderTemplate('templates/cat_list.php', ['categories' => $category_arr]);
-$header_cont = renderTemplate('templates/header-common.php', ['user' => $_SESSION['user']]);
 
 if (!$link) {
     $error = mysqli_connect_error();
     $main_cont = renderTemplate('templates/error.php', ['error' => $error]);
 }
 else {
-    $sql = 'SELECT `ID`, `name` FROM categories';
+    $sql = 'SELECT `id`, `name` FROM categories';
     $result = mysqli_query($link, $sql);
+
     if ($result) {
         $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
@@ -24,13 +23,20 @@ else {
         $error = mysqli_error($link);
         $content = renderTemplate('templates/error.php', ['error' => $error]);
     }
+    $sql = 'SELECT l.id, l.name, l.category_id, l.image, l.lot_rate, l.lot_step, l.description FROM lots l '
+        . 'JOIN categories c ON l.category_id = c.id '
+        .'ORDER BY id DESC LIMIT 9';
 
-    $main_cont = renderTemplate('templates/index.php', ['lot_list' => $lot_list, 'lot_time_remaining' => $remaining]);
+    if ($res = mysqli_query($link, $sql)) {
+        $lots = mysqli_fetch_all($res, MYSQLI_ASSOC);
+        $main_cont = renderTemplate('templates/index.php', ['lot_list' => $lots, 'lot_time_remaining' => $remaining]);
+    }
+
+    $nav_cont = renderTemplate('templates/cat_list.php', ['categories' => $categories]);
 
 }
 
-
-
+$header_cont = renderTemplate('templates/header-common.php', ['user' => $_SESSION['user']]);
 $footer_cont = renderTemplate('templates/footer-common.php', ['nav_cont' => $nav_cont]);
 
 $layout_cont = renderTemplate('templates/layout.php', [
@@ -39,7 +45,6 @@ $layout_cont = renderTemplate('templates/layout.php', [
     'header_cont' => $header_cont,
     'content' => $main_cont,
     'footer_cont' => $footer_cont,
-    'category_arr' => $category_arr
 ]);
 
 print($layout_cont);

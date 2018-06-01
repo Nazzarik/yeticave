@@ -5,56 +5,56 @@ require_once ('config.php');
 require_once ('data.php');
 require_once ('userdata.php');
 
+require_once ('init.php');
+require_once ('config/db.php');
+
 session_start();
 
-$db = require_once ('config/db.php');
 
-session_start();
-
-//$link = mysqli_connect($db['host'], $db['user'], $db['password'], $db['database']);
-//mysqli_set_charset($link, "utf8");
-
-$nav_cont = renderTemplate('templates/cat_list.php', []);
-
-
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $form = $_POST;
-    $required = ['email', 'password', 'name', 'contacts', 'avatar'];
-    $errors = [];
-
-    foreach ($required as $field) {
-        if (empty($form[$field])) {
-            $errors[$field] = 'Єто поле надо заполнить';
-        }
-    }
-//    if (!count($errors) and $user =  searchUserByEmail($form['email'], $users)) {
-//        if (password_verify($form['password'], $user['password'])) {
-//            $_SESSION['user'] = $user;
-//        }
-//        else {
-//            $errors['password'] = 'Неверный пароль';
-//        }
-//    }
-//    else {
-//        $errors['email'] = 'Такой пользователь не найден';
-//    }
-
-    if (count($errors)) {
-        $main_cont = renderTemplate('templates/sign-up.php', [
-            'nav_cont' => $nav_cont,
-            'form' => $form,
-            'errors' => $errors
-        ]);
-    }
-    else {
-        header("Location: /yeticave/index.php");
-        exit();
-    }
+if (!$link) {
+    $error = mysqli_connect_error();
+    $main_cont = renderTemplate('templates/error.php', ['error' => $error]);
 }
 else {
-    $main_cont = renderTemplate('templates/sign-up.php', ['nav_cont' => $nav_cont, 'lot_list' => $lot_list, 'lot_time_remaining' => $remaining]);
+    $sql = 'SELECT `id`, `name` FROM categories';
+    $result = mysqli_query($link, $sql);
+
+    if ($result) {
+        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    else {
+        $error = mysqli_error($link);
+        $content = renderTemplate('templates/error.php', ['error' => $error]);
+    }
+    $nav_cont = renderTemplate('templates/cat_list.php', ['categories' => $categories]);
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $form = $_POST;
+        $required = ['email', 'password', 'name', 'contacts', 'avatar'];
+        $errors = [];
+
+        foreach ($required as $field) {
+            if (empty($form[$field])) {
+                $errors[$field] = 'Єто поле надо заполнить';
+            }
+        }
+        if (count($errors)) {
+            $main_cont = renderTemplate('templates/sign-up.php', [
+                'nav_cont' => $nav_cont,
+                'form' => $form,
+                'errors' => $errors
+            ]);
+        }
+        else {
+            header("Location: /yeticave/index.php");
+            exit();
+        }
+    }
+    else {
+        $main_cont = renderTemplate('templates/sign-up.php', ['nav_cont' => $nav_cont, 'lot_list' => $lot_list, 'lot_time_remaining' => $remaining]);
+    }
 }
+
 
 $header_cont = renderTemplate('templates/header-common.php', []);
 $footer_cont = renderTemplate('templates/footer-common.php', ['nav_cont' => $nav_cont]);
@@ -64,11 +64,7 @@ $layout_cont = renderTemplate('templates/layout.php', [
     'username' => $_SESSION['user']['name'],
     'header_cont' => $header_cont,
     'content' => $main_cont,
-    'footer_cont' => $footer_cont,
-    'category_arr' => $category_arr,
-    'user_name' => $user_name,
-    'is_auth' => $is_auth,
-    'user_avatar' => $user_avatar,
+    'footer_cont' => $footer_cont
 ]);
 
 print($layout_cont);
