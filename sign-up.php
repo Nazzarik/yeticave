@@ -16,7 +16,7 @@ if (!$link) {
     $main_cont = renderTemplate('templates/error.php', ['error' => $error]);
 }
 else {
-    $sql = 'SELECT `id`, `name` FROM categories';
+    $sql = 'SELECT `id`, `category` FROM categories';
     $result = mysqli_query($link, $sql);
 
     if ($result) {
@@ -30,8 +30,21 @@ else {
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $form = $_POST;
-        $required = ['email', 'password', 'name', 'contacts', 'avatar'];
+        $required = ['email', 'password', 'name', 'contacts'];
         $errors = [];
+
+
+        $sql = 'INSERT INTO users (`name`, `email`, `password_hash`) VALUES (?, ?, ?)' ;
+        $stmt = db_get_prepare_stmt($link, $sql, [$form['name'], $form['email'], $form['password']]);
+        $res = mysqli_stmt_execute($stmt);
+        if ($res) {
+            $lot_id = mysqli_insert_id($link);
+            header('location: /yeticave/index.php');
+        }
+        else {
+            $main_cont = renderTemplate('templates/error.php', ['error' => mysqli_error($link)]);
+        }
+
 
         foreach ($required as $field) {
             if (empty($form[$field])) {

@@ -8,7 +8,7 @@ use yeticave;
 
 create table categories (
   id tinyint unsigned auto_increment primary key,
-  name char(50) not null
+  category char(50) not null
 );
 
 create table users (

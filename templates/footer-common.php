@@ -1,4 +1,5 @@
 <?=$nav_cont;?>
+
 <div class="main-footer__bottom container">
     <div class="main-footer__copyright">
         <p>© 2018, YetiCave</p>

@@ -13,7 +13,7 @@ if (!$link) {
     $main_cont = renderTemplate('templates/error.php', ['error' => $error]);
 }
 else {
-    $sql = 'SELECT `id`, `name` FROM categories';
+    $sql = 'SELECT `id`, `category` FROM categories';
     $result = mysqli_query($link, $sql);
 
     if ($result) {
@@ -23,7 +23,7 @@ else {
         $error = mysqli_error($link);
         $content = renderTemplate('templates/error.php', ['error' => $error]);
     }
-    $sql = 'SELECT l.id, l.name, l.category_id, l.image, l.lot_rate, l.lot_step, l.description FROM lots l '
+    $sql = 'SELECT l.id, l.name, c.category, l.image, l.lot_rate FROM lots l '
         . 'JOIN categories c ON l.category_id = c.id '
         .'ORDER BY id DESC LIMIT 9';
 
