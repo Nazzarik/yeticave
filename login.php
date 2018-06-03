@@ -6,6 +6,7 @@ require_once ('data.php');
 require_once ('userdata.php');
 
 require_once ('init.php');
+require_once ('config/db.php');
 
 
 session_start();
@@ -33,13 +34,25 @@ else {
 
         $required = ['email', 'password'];
         $errors = [];
+
+        $sql = 'SELECT `email`, `password_hash`, `name`, `avatar` FROM users' ;
+        $result = mysqli_query($link, $sql);
+        if ($result) {
+            $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        }
+        else {
+            $error = mysqli_error($link);
+            $content = renderTemplate('templates/error.php', ['error' => $error]);
+        }
+
+
         foreach ($required as $field) {
             if (empty($form[$field])) {
                 $errors[$field] = 'Єто поле надо заполнить';
             }
         }
-        if (!count($errors) and $user =  searchUserByEmail($form['email'], $users)) {
-            if (password_verify($form['password'], $user['password'])) {
+        if (!count($errors) and $user =  searchUserByEmail($form['email'], $rows)) {
+            if (password_verify($form['password'], $user['password_hash'])) {
                 $_SESSION['user'] = $user;
             }
             else {

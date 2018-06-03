@@ -35,7 +35,8 @@ else {
 
 
         $sql = 'INSERT INTO users (`name`, `email`, `password_hash`) VALUES (?, ?, ?)' ;
-        $stmt = db_get_prepare_stmt($link, $sql, [$form['name'], $form['email'], $form['password']]);
+        $password_hash = password_hash($form['password'], PASSWORD_DEFAULT);
+        $stmt = db_get_prepare_stmt($link, $sql, [$form['name'], $form['email'], $password_hash]);
         $res = mysqli_stmt_execute($stmt);
         if ($res) {
             $lot_id = mysqli_insert_id($link);
