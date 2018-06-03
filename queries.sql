@@ -6,7 +6,7 @@ values
   ('warrior07@mail.ru', 'Руслан', '$2y$10$2OxpEH7narYpkOT1H5cApezuzh10tZEEQ2axgFOaKW.55LxIJBgWW', 'img/avatar.jpg');
 
 #   Insert categories
-insert into categories (name)
+insert into categories (category)
 values
   ('Доски и лыжи'), ('Крепления'), ('Ботинки'), ('Одежда'), ('Инструменты'), ('Разное');
 
@@ -37,7 +37,7 @@ values
   (9400, 2, 6);
 
 #   Select all categories
-select name from categories;
+# select name from categories;
 
 
 

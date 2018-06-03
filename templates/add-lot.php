@@ -1,28 +1,7 @@
-<nav class="nav">
-    <ul class="nav__list container">
-        <li class="nav__item">
-            <a href="all-lots.html">Доски и лыжи</a>
-        </li>
-        <li class="nav__item">
-            <a href="all-lots.html">Крепления</a>
-        </li>
-        <li class="nav__item">
-            <a href="all-lots.html">Ботинки</a>
-        </li>
-        <li class="nav__item">
-            <a href="all-lots.html">Одежда</a>
-        </li>
-        <li class="nav__item">
-            <a href="all-lots.html">Инструменты</a>
-        </li>
-        <li class="nav__item">
-            <a href="all-lots.html">Разное</a>
-        </li>
-    </ul>
-</nav>
-
 <?php $class_name = isset($errors) ? "form--invalid" : "";?>
-<form class="form form--add-lot container <?=$class_name;?>" action="add.php" method="post" enctype="multipart/form-data">
+
+<?=$nav_cont;?>
+<form class="form form--add-lot container <?=$class_name;?>" action="add-lot.php" method="post" enctype="multipart/form-data">
     <h2>Добавление лота</h2>
 
     <div class="form__container-two">
@@ -57,7 +36,7 @@
     <div class="form__item form__item--wide <?=$class_name;?>">
         <label for="message">Описание</label>
         <textarea id="message" name="message" placeholder="Напишите описание лота"><?= $value;?></textarea>
-        <span class="form__error"></span>
+        <span class="form__error"><></span>
     </div>
 
     <?php $class_name = isset($errors['Описание']) ? "form__item--invalid" : "";

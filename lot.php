@@ -43,16 +43,24 @@ if (!$lot) {
 //    header("Location: ./404.php");
 
 }
+$nav_cont = renderTemplate('templates/cat_list.php', []);
+$header_cont = renderTemplate('templates/header-common.php', ['user' => $_SESSION['user']]);
 
-$page_content = renderTemplate('templates/lot.php', [
+$main_cont = renderTemplate('templates/lot.php', [
+    'nav_cont' => $nav_cont,
     'lot' => $lot,
     'lot_time_remaining' => $remaining,
     'cookie' => $baba
 ]);
+$footer_cont = renderTemplate('templates/footer-common.php', ['nav_cont' => $nav_cont]);
+
+
 $layout_content = renderTemplate('templates/layout.php', [
     'title' => $title,
     'username' => $_SESSION['user']['name'],
-    'content' => $page_content,
+    'header_cont' => $header_cont,
+    'content' => $main_cont,
+    'footer_cont' => $footer_cont,
     'category_arr' => $category_arr
 ]);
 

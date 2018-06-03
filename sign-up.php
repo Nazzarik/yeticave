@@ -8,7 +8,6 @@ require_once ('userdata.php');
 require_once ('init.php');
 require_once ('config/db.php');
 
-
 session_start();
 
 
@@ -31,18 +30,20 @@ else {
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $form = $_POST;
-
-        $required = ['email', 'password'];
+        $required = ['email', 'password', 'name', 'contacts'];
         $errors = [];
 
-        $sql = 'SELECT `email`, `password_hash`, `name`, `avatar` FROM users' ;
-        $result = mysqli_query($link, $sql);
-        if ($result) {
-            $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+        $sql = 'INSERT INTO users (`name`, `email`, `password_hash`) VALUES (?, ?, ?)' ;
+        $password_hash = password_hash($form['password'], PASSWORD_DEFAULT);
+        $stmt = db_get_prepare_stmt($link, $sql, [$form['name'], $form['email'], $password_hash]);
+        $res = mysqli_stmt_execute($stmt);
+        if ($res) {
+            $lot_id = mysqli_insert_id($link);
+            header('location: /yeticave/index.php');
         }
         else {
-            $error = mysqli_error($link);
-            $content = renderTemplate('templates/error.php', ['error' => $error]);
+            $main_cont = renderTemplate('templates/error.php', ['error' => mysqli_error($link)]);
         }
 
 
@@ -51,20 +52,8 @@ else {
                 $errors[$field] = 'Єто поле надо заполнить';
             }
         }
-        if (!count($errors) and $user =  searchUserByEmail($form['email'], $rows)) {
-            if (password_verify($form['password'], $user['password_hash'])) {
-                $_SESSION['user'] = $user;
-            }
-            else {
-                $errors['password'] = 'Неверный пароль';
-            }
-        }
-        else {
-            $errors['email'] = 'Такой пользователь не найден';
-        }
-
         if (count($errors)) {
-            $main_cont = renderTemplate('templates/login.php', [
+            $main_cont = renderTemplate('templates/sign-up.php', [
                 'nav_cont' => $nav_cont,
                 'form' => $form,
                 'errors' => $errors
@@ -76,28 +65,20 @@ else {
         }
     }
     else {
-        if (isset($_SESSION['user'])) {
-            $main_cont = renderTemplate('templates/lot.php', []);
-        }
-        else {
-            $main_cont = renderTemplate('templates/login.php', ['nav_cont' => $nav_cont]);
-        }
+        $main_cont = renderTemplate('templates/sign-up.php', ['nav_cont' => $nav_cont, 'lot_list' => $lot_list, 'lot_time_remaining' => $remaining]);
     }
 }
 
 
-
-$header_cont = renderTemplate('templates/header-common.php', ['user' => $_SESSION['user']]);
+$header_cont = renderTemplate('templates/header-common.php', []);
 $footer_cont = renderTemplate('templates/footer-common.php', ['nav_cont' => $nav_cont]);
+
 $layout_cont = renderTemplate('templates/layout.php', [
     'title' => $title,
+    'username' => $_SESSION['user']['name'],
     'header_cont' => $header_cont,
     'content' => $main_cont,
-    'footer_cont' => $footer_cont,
-    'category_arr' => $category_arr,
-    'user_name' => $user_name,
-    'is_auth' => $is_auth,
-    'user_avatar' => $user_avatar,
+    'footer_cont' => $footer_cont
 ]);
 
 print($layout_cont);
